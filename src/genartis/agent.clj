@@ -5,6 +5,9 @@
 
 (def TRI-MUTATION-RATE 0.10)
 (def ATTR-MUTATION-RATE 0.20)
+(def NEW-TRIANGLE-RATE 0.20)
+(def RAND-ATTR-RATE 0.20)
+(def ALTER-ATTR-RATE 0.60)
 
 (def WIDTH  256)
 (def HEIGHT 256)
@@ -60,7 +63,8 @@
   (< (rand) TRI-MUTATION-RATE))
 
 
-(defn mutate-tri [tri]
+(defn rand-mutate-tri [tri]
+  (println "rand-mutate")
   (let [{:keys [p1 p2 p3 col]} tri
         [x1 y1]   p1
         [x2 y2]   p2
@@ -77,7 +81,8 @@
            (if (mutate-attr?) (rand-col-comp) b)
            (if (mutate-attr?) (rand-col-comp) a)]}))
 
-(defn mutate-tri* [tri]
+(defn alter-mutate-tri [tri]
+  (println "alter-mutate")
   (let [{:keys [p1 p2 p3 col]} tri
         [x1 y1]   p1
         [x2 y2]   p2
@@ -94,8 +99,20 @@
            (if (mutate-attr?) (alter-col-comp b) b)
            (if (mutate-attr?) (alter-col-comp a) a)]}))
 
+(defn new-mutate-tri [tri]
+  (println "new-mutate")
+  (make-triangle))
+
+(defn mutate-tri-fn []
+  (let [r (rand)]
+    (if (< r NEW-TRIANGLE-RATE)
+      new-mutate-tri
+      (if (< r (+ NEW-TRIANGLE-RATE RAND-ATTR-RATE))
+        rand-mutate-tri
+        alter-mutate-tri))))
+
 (defn mutate-painting [p]
-  (map (fn [tri] (if (mutate-tri?) (mutate-tri tri) tri)) p))
+  (map (fn [tri] (if (mutate-tri?) ((mutate-tri-fn) tri) tri)) p))
 
 (defn abs [x]
   (if (pos? x) x (- x)))
