@@ -30,11 +30,11 @@
           next-gen (map (comp mutate-painting crossover) 
                         (select-mates @current-paintings @current-scores))]
       (println "GENERATION " (count @bests))
-      (println "Avg score: " (float (/ (reduce + @current-scores) (count @current-scores))))
-      (println "Max score: " (apply max @current-scores))
+      (println "Avg score: " (int  (quot (/ (reduce + @current-scores) (count @current-scores)) 1000000)))
+      (println "Max score: " (int (quot (apply max @current-scores) 1000000)))
       (println)
       (swap! bests #(concat % [best-p]))
-      (reset! current-paintings next-gen)
+      (reset! current-paintings (conj (drop 1 next-gen) best-p) )
       (reset! current-scores []))))
 
 ;; Quil
@@ -74,7 +74,11 @@
 
 (defn update []
   (if (= (count @current-paintings) (count @current-scores))
-    (run-ga-gen)
+    (do 
+      (run-ga-gen)
+      (when (= 0 (mod (dec (count @bests)) 100))
+        (draw-painting! (last @bests))
+        (save (str "saves/" (count @bests) ".png"))))
     (draw-and-score! (nth @current-paintings (count @current-scores)))))
 
 (defn -main []
