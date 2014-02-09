@@ -1,14 +1,13 @@
 (ns genartis.agent
   (:require [quil.core :refer (red green blue)]))
 
-(def TRI-COUNT 50)
+(def TRI-COUNT 100)
 
-(def TRI-MUTATION-RATE 0.10)
-(def ATTR-MUTATION-RATE 0.20)
+(def TRI-MUTATION-RATE 1.0)
+(def ATTR-MUTATION-RATE 0.10)
 
-(def WIDTH  256)
-(def HEIGHT 256)
-
+(def WIDTH  128)
+(def HEIGHT 128)
 
 ;; Generating random paintings
 (defn rand-pos []
@@ -26,12 +25,10 @@
 (defn rand-painting []
   (repeatedly TRI-COUNT make-triangle))
 
-
 ;; Mutating paintings, triangles, and attributes
 (defn +- 
   ([]  (rand-nth [+ -]))
   ([x] ((+-) x)))
-
 
 (defn alter-x [x]
   (-> x (+ (+- (rand-int 6))) (max 0) (min WIDTH)))
@@ -42,7 +39,6 @@
 (defn alter-col-comp [cc] 
   (-> cc (+ (+- (rand-int 6))) (max 0) (min 255)))
 
-
 (defn rand-x []
   (rand-int WIDTH))
 
@@ -52,13 +48,11 @@
 (defn rand-col-comp [] 
   (rand-int 255))
 
-
 (defn mutate-attr? []
   (< (rand) ATTR-MUTATION-RATE))
 
 (defn mutate-tri? []
   (< (rand) TRI-MUTATION-RATE))
-
 
 (defn mutate-tri [tri]
   (let [{:keys [p1 p2 p3 col]} tri
@@ -95,7 +89,7 @@
            (if (mutate-attr?) (alter-col-comp a) a)]}))
 
 (defn mutate-painting [p]
-  (map (fn [tri] (if (mutate-tri?) (mutate-tri tri) tri)) p))
+  (map (fn [tri] (if (mutate-tri?) (mutate-tri* tri) tri)) p))
 
 (defn abs [x]
   (if (pos? x) x (- x)))
