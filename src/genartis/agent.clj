@@ -97,7 +97,6 @@
 (defn mutate-painting [p]
   (map (fn [tri] (if (mutate-tri?) (mutate-tri tri) tri)) p))
 
-
 (defn abs [x]
   (if (pos? x) x (- x)))
 
@@ -108,9 +107,12 @@
             (fn [o n]
               (let [[o-r o-g o-b] [(red o) (green o) (blue o)]
                     [n-r n-g n-b] [(red n) (green n) (blue n)]
-                    r-r           (- 255 (abs (- o-r n-r)))
-                    r-g           (- 255 (abs (- o-g n-g)))
-                    r-b           (- 255 (abs (- o-b n-b)))
+                    t-r           (- 255 (abs (- o-r n-r)))
+                    t-g           (- 255 (abs (- o-g n-g)))
+                    t-b           (- 255 (abs (- o-b n-b)))
+                    r-r           (* t-r t-r)
+                    r-g           (* t-g t-g)
+                    r-b           (* t-b t-b)
                     final         (+ r-r r-g r-b)]
                 final))
             goal p)))
