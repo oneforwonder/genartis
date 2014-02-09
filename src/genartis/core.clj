@@ -13,7 +13,7 @@
 (def current-paintings (atom []))
 (def current-scores (atom []))
 
-(def ^:dynamic goal-pixels [])
+;(def ^:dynamic goal-pixels [])
 
 ;; Genetic algorithm
 (defn run-ga-gen []
@@ -34,6 +34,8 @@
 
 ;; Quil
 (defn setup []
+  (size WIDTH HEIGHT :p2d)
+
   ; Load in goal image
   (println "SETUP")
   (image (load-image GOAL-IMAGE) 0 0)
@@ -65,7 +67,7 @@
 (defn draw-and-score! [p]
   (draw-bg!)
   (draw-painting! p)
-  (let [score (painting-fitness goal-pixels pixels)]
+  (let [score (painting-fitness goal-pixels (pixels))]
     (println "score:" score)
     (swap! current-scores #(concat % [score]))))
 
