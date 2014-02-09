@@ -1,4 +1,5 @@
-(ns genartis.agent)
+(ns genartis.agent
+  (:require [quil.core :refer (red green blue)]))
 
 (def TRI-COUNT 3)
 
@@ -97,6 +98,19 @@
   (map (fn [tri] (if (mutate-tri?) (mutate-tri tri) tri)) p))
 
 
+(defn abs [x]
+  (if (pos? x) x (- x)))
+
 ;; Determining painting fitness
-(defn painting-fitness [goal current]
-  (rand))
+(defn painting-fitness [goal p]
+  (reduce +
+    (map 
+      (fn [o n]
+        (let [[o-r o-g o-b] [(red o) (green o) (blue o)]
+              [n-r n-g n-b] [(red n) (green n) (blue n)]
+              r-r           (- 255 (abs (- o-r n-r)))
+              r-g           (- 255 (abs (- o-g n-g)))
+              r-b           (- 255 (abs (- o-b n-b)))
+              final         (+ r-r r-g r-b)]
+          final))
+      goal p)))
