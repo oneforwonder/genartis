@@ -1,5 +1,6 @@
 (ns genartis.core
   (:use [genga.ga])
+  (:import java.util.Arrays)
   (:require [genartis.agent :refer [rand-painting mutate-painting painting-fitness WIDTH HEIGHT]]
             [quil.core :refer :all])) 
 
@@ -13,7 +14,7 @@
 (def current-paintings (atom []))
 (def current-scores (atom []))
 
-(def ^:dynamic goal-pixels [])
+;(def ^:dynamic goal-pixels [])
 
 ;; Genetic algorithm
 (defn run-ga-gen []
@@ -38,10 +39,14 @@
 
 ;; Quil
 (defn setup []
+  ;(size WIDTH HEIGHT :p2d)
+
   ; Load in goal image
   (println "SETUP")
   (image (load-image GOAL-IMAGE) 0 0)
-  (def goal-pixels (pixels))
+  (def goal-pixels (Arrays/copyOf (pixels) (count (pixels))))
+
+  (println (nth goal-pixels 131000))
   
   ; Create starting population
   (reset! current-paintings (repeatedly POPULATION rand-painting))
@@ -82,4 +87,5 @@
     :title "Genartis"
     :setup setup
     :draw update 
-    :size [WIDTH HEIGHT]))
+    :size [WIDTH HEIGHT]
+    :renderer :p2d))
