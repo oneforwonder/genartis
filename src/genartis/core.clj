@@ -39,15 +39,10 @@
 
 ;; Quil
 (defn setup []
-  ;(size WIDTH HEIGHT :p2d)
-
   ; Load in goal image
-  (println "SETUP")
   (image (load-image GOAL-IMAGE) 0 0)
   (def goal-pixels (Arrays/copyOf (pixels) (count (pixels))))
 
-  (println (nth goal-pixels 131000))
-  
   ; Create starting population
   (reset! current-paintings (repeatedly POPULATION rand-painting))
 
@@ -58,8 +53,8 @@
   (apply background BG-COLOR))
 
 (defn draw-triangle! [{:keys [p1 p2 p3 col]}] 
-  (let [[[x1 y1] [x2 y2] [x3 y3]] [p1 p2 p3]]
-    (apply fill col) 
+  (let [[[x1 y1] [x2 y2] [x3 y3] [r g b a]] [p1 p2 p3 col]]
+    (fill r g b (+ 30 (* 0.15 a)))  ; Alpha restricted to 30-68
     (triangle x1 y1 x2 y2 x3 y3)))
 
 (defn draw-painting! [painting]
