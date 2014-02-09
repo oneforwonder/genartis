@@ -64,7 +64,6 @@
 
 
 (defn rand-mutate-tri [tri]
-  (println "rand-mutate")
   (let [{:keys [p1 p2 p3 col]} tri
         [x1 y1]   p1
         [x2 y2]   p2
@@ -82,7 +81,6 @@
            (if (mutate-attr?) (rand-col-comp) a)]}))
 
 (defn alter-mutate-tri [tri]
-  (println "alter-mutate")
   (let [{:keys [p1 p2 p3 col]} tri
         [x1 y1]   p1
         [x2 y2]   p2
@@ -100,7 +98,6 @@
            (if (mutate-attr?) (alter-col-comp a) a)]}))
 
 (defn new-mutate-tri [tri]
-  (println "new-mutate")
   (make-triangle))
 
 (defn mutate-tri-fn []
