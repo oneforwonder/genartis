@@ -6,8 +6,8 @@
 (def TRI-MUTATION-RATE 0.10)
 (def ATTR-MUTATION-RATE 0.20)
 
-(def WIDTH  512)
-(def HEIGHT 512)
+(def WIDTH  256)
+(def HEIGHT 256)
 
 
 ;; Generating random paintings
