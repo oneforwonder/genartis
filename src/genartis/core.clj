@@ -6,7 +6,7 @@
 
 (def FPS 60)
 (def BG-COLOR [0 0 0])
-(def POPULATION 10)
+(def POPULATION 40)
 
 (def GOAL-IMAGE "img/Lenna.png")
 
@@ -30,8 +30,8 @@
           next-gen (map (comp mutate-painting crossover) 
                         (select-mates @current-paintings @current-scores))]
       (println "GENERATION " (count @bests))
-      (println "Avg score: " (apply max @current-scores))
-      (println "Max score: " (float (/ (reduce + @current-scores) (count @current-scores))))
+      (println "Avg score: " (float (/ (reduce + @current-scores) (count @current-scores))))
+      (println "Max score: " (apply max @current-scores))
       (println)
       (swap! bests #(concat % [best-p]))
       (reset! current-paintings next-gen)
