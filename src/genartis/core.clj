@@ -28,6 +28,10 @@
                         (nth @current-paintings))
           next-gen (map (comp mutate-painting crossover) 
                         (select-mates @current-paintings @current-scores))]
+      (println "GENERATION " (count @bests))
+      (println "Avg score: " (apply max @current-scores))
+      (println "Max score: " (float (/ (reduce + @current-scores) (count @current-scores))))
+      (println)
       (swap! bests #(concat % [best-p]))
       (reset! current-paintings next-gen)
       (reset! current-scores []))))
@@ -66,12 +70,9 @@
   (draw-bg!)
   (draw-painting! p)
   (let [score (painting-fitness goal-pixels (pixels))]
-    (println "score: " score)
     (swap! current-scores #(concat % [score]))))
 
 (defn update []
-  (println "paintings:" (count @current-paintings))
-  (println "scores:" (count @current-scores))
   (if (= (count @current-paintings) (count @current-scores))
     (run-ga-gen)
     (draw-and-score! (nth @current-paintings (count @current-scores)))))
