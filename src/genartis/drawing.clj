@@ -3,15 +3,15 @@
         [genartis.agent :only [rand-painting]]
         quil.core)) 
 
-(def FPS 1)
+(def FPS 100)
 (def BG-COLOR [0 0 0])
 (def AGENT-COUNT 100)
 
 (def paintings (atom []))
-(def triangles (take TRI-COUNT (repeatedly make-triangle)))
+(def frame-num (atom 0))
 
 (defn setup []
-  (reset! paintings (repeatedly AGENT-COUNT rand-painting))
+  (reset! paintings (repeatedly rand-painting))
   (smooth)
   (frame-rate FPS) 
   (no-stroke)
@@ -26,9 +26,15 @@
   (doseq [tri painting]
     (draw-triangle! tri)))
 
+(defn draw-bg! []
+  (no-stroke)
+  (apply fill BG-COLOR)
+  (rect 0 0 WIDTH HEIGHT))
+
 (defn update []
-  (doseq [p @paintings]
-    (draw-painting! p))) 
+  (draw-bg!)
+  (draw-painting! (nth @paintings @frame-num))
+  (swap! frame-num inc))
 
 (defn -main []
   (defsketch genartis
