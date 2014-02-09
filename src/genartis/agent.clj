@@ -1,7 +1,7 @@
 (ns genartis.agent
   (:require [quil.core :refer (red green blue)]))
 
-(def TRI-COUNT 3)
+(def TRI-COUNT 50)
 
 (def TRI-MUTATION-RATE 0.10)
 (def ATTR-MUTATION-RATE 0.20)
